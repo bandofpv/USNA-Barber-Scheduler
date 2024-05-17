@@ -1,0 +1,19 @@
+1715911498204	geckodriver	INFO	Listening on 127.0.0.1:61111
+1715911501252	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-no-remote" "-profile" "C:\\Users\\m260477\\AppData\\Local\\Temp\\rust_mozprofile8QqxGZ"
+console.error: WindowsGPOParser: 
+  Unable to parse JSON for Preferences
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1715911501594	Marionette	INFO	Marionette enabled
+Dynamically enable window occlusion 0
+1715911501669	Marionette	INFO	Listening on port 61121
+Read port: 61121
+1715911501841	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://booknow.appointment-plus.com."
+1715911506439	Marionette	WARN	Ignoring event 'DOMContentLoaded' because document has an invalid readyState of 'complete'.
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://booknow.appointment-plus.com."
+JavaScript warning: https://booknow.appointment-plus.com/7qc9ltx6/, line 5: Script terminated by timeout at:
+nrWrapper@https://booknow.appointment-plus.com/7qc9ltx6/:5:17673
+
+1715911516920	Marionette	INFO	Stopped listening on port 61121
+Dynamically enable window occlusion 1
