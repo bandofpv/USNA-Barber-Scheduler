@@ -1,3 +1,4 @@
+from datetime import date
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -6,8 +7,32 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException
 
+today = date.today()
+
+date_file = "dates.txt"
+log_file = "scheduler.log"
+
+dates = []
+
+with open(date_file, 'r') as file_object:
+    lines = file_object.readlines()
+
+for line in lines:
+    dates.append(line.strip())
+
+appt_date = dates.pop(0)
+year = appt_date[0:4]
+month = appt_date[5:7]
+day = appt_date[8:10]
+
+appt_day = date(int(year), int(month), int(day))
+days_left = abs(appt_day - today).days
+
+if days_left == 13:
+    pass
+
 alpha = "260477"  # input alpha code
-date = "20240530"
+#date = "2024-05-30"
 appt_time = "12:45"  # input appointment time
 
 # input "Male Haircut", "Deep Conditioner & Blow Dry", "Shampoo & Haircut", "Blow Dry & Flat Iron", "Braids, or
@@ -16,9 +41,7 @@ service = "Male Haircut"
 
 barber = "Sharr (Barber)"  # input "Sharr (Barber)" or "Patty (Beauty/Barber)"
 
-day = date[6:8]
-month = date[4:6]
-year = date[0:4]
+
 
 driver = webdriver.Firefox()
 wait = WebDriverWait(driver, 10)
