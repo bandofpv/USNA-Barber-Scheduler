@@ -1,4 +1,5 @@
-from datetime import date, datetime
+import logging
+from datetime import date
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -7,10 +8,13 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, WebDriverException
 
+# Create and configure logger
+logging.basicConfig(filename="scheduler.log", format='%(asctime)s %(message)s', level=logging.INFO)
+logger = logging.getLogger()
+
 today = date.today()  # grab today's date
 
 date_file = "dates.txt"  # filename of date text file
-log_file = "scheduler.log"  # filename of log file
 
 dates = []
 
@@ -19,6 +23,8 @@ with open(date_file, 'r') as file_object:  # open date_file and read each line
 
 for line in lines:  # append each line in date_file into dates list
     dates.append(line.strip())
+
+dates = [d for d in dates if d.strip()]  # remove empty lines from dates list
 
 appt_date = dates.pop(0)  # grab the first date in dates list
 
@@ -31,9 +37,9 @@ appt_time = appt_date[11:16]
 appt_day = date(int(year), int(month), int(day))  # convert appt_date into a date object
 days_left = (appt_day - today).days  # calculate the number of days between appointment and today
 
-if days_left <= 13:  # 13 days is the earliest you can schedule an appointment
+if 0 < days_left <= 13:  # 13 days is the earliest you can schedule an appointment
 
-    alpha = "260477"  # input alpha code
+    alpha = "ALPHACODE"  # input alpha code
 
     # input "Male Haircut", "Deep Conditioner & Blow Dry", "Shampoo & Haircut", "Blow Dry & Flat Iron", "Braids, or
     # "Facial Waxing"
@@ -45,11 +51,8 @@ if days_left <= 13:  # 13 days is the earliest you can schedule an appointment
     wait = WebDriverWait(driver, 10)  # create a wait object
     try:  # try to open appointment website
         driver.get("https://booknow.appointment-plus.com/7qc9ltx6/10")
-    except WebDriverException:  # if the website is unreachable, log it in log_file
-        current_time = datetime.now()
-
-        with open(log_file, 'a') as file_object:
-            file_object.write(f"{current_time}: Webpage unreachable \n")
+    except WebDriverException:  # if the website is unreachable, log it
+        logger.info("Webpage unreachable")
 
         driver.close()  # close the driver to break rest of code
 
@@ -125,15 +128,9 @@ if days_left <= 13:  # 13 days is the earliest you can schedule an appointment
                     pass
             available = True
 
-    if not available:  # if the desired appointment day is unavailable, log it in log_file
-        current_time = datetime.now()
-
-        with open(log_file, 'a') as file_object:
-            file_object.write(f"{current_time}: Your desired appointment day on {appt_date} is unavailable \n")
-
-    # wait for appointment times to load
-    wait.until(ec.visibility_of_element_located((By.CLASS_NAME, "appointment-list-header")))
     if available:  # if the desired appointment day is available, attempt to book appointment
+        # wait for appointment times to load
+        wait.until(ec.visibility_of_element_located((By.CLASS_NAME, "appointment-list-header")))
         found = False
         time_idx = 0
         for i in range(2):  # loop only 2 times to avoid unnecessary web queries
@@ -145,12 +142,10 @@ if days_left <= 13:  # 13 days is the earliest you can schedule an appointment
                     time_idx = spans.index(span)
                     break
 
-            # if second time looping and desired appointment time is unavailable, log it in log_file
+            # if second time looping and desired appointment time is unavailable, log it
             if i == 1 and not found:
-                current_time = datetime.now()
+                logger.info(f"Your desired appointment time on {appt_date} is unavailable")
 
-                with open(log_file, 'a') as file_object:
-                    file_object.write(f"{current_time}: Your desired appointment time on {appt_date} is unavailable \n")
                 break
 
             # if desired appointment time isn't visible, navigate to next menu
@@ -174,15 +169,43 @@ if days_left <= 13:  # 13 days is the earliest you can schedule an appointment
                     except ElementClickInterceptedException as e:
                         pass
 
+                logger.info(f"Your appointment on {appt_date} was booked")
+
+        # add a "\n" to the end of each element in dates list
+        for i in range(len(dates)):
+            dates[i] = dates[i] + "\n"
+
+        # write dates list onto date_file
+        with open(date_file, 'w') as file_object:
+            file_object.writelines(dates)
+
+    else:  # if the desired appointment day is unavailable, add date back to dates.txt file and log it
+        # re-add desired appointment date to start of dates list
+        dates.insert(0, appt_date)
+
+        # add a "\n" to the end of each element in dates list
+        for i in range(len(dates)):
+            dates[i] = dates[i] + "\n"
+
+        # write dates list onto date_file
+        with open(date_file, 'w') as file_object:
+            file_object.writelines(dates)
+
+        logger.info(f"Your desired appointment day on {appt_date} is unavailable")
+
+    driver.close()
+
+# if desired appointment date is after current date, write over date_file excluding desired appointment date due to pop
+elif days_left < 0:
     # add a "\n" to the end of each element in dates list
-    for idx in range(len(dates)):
-        dates[idx] = dates[idx] + "\n"
+    for i in range(len(dates)):
+        dates[i] = dates[i] + "\n"
 
     # write dates list onto date_file
     with open(date_file, 'w') as file_object:
         file_object.writelines(dates)
 
-    driver.close()
+    logger.info(f"Your appointment date on {appt_date} is overdue")
 
 # if desired appointment date is not released yet
 else:
