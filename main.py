@@ -87,7 +87,7 @@ if 0 < days_left <= 13:  # 13 days is the earliest you can schedule an appointme
             pass
 
     # locate login input element and login using usna email
-    login = driver.find_element(By.NAME, "loginname")
+    login = wait.until(ec.visibility_of_element_located((By.NAME, "loginname")))
     login.clear()
     login.send_keys(f"m" + alpha + "@usna.edu")
 
@@ -135,11 +135,12 @@ if 0 < days_left <= 13:  # 13 days is the earliest you can schedule an appointme
             available = True
 
     if available:  # if the desired appointment day is available, attempt to book appointment
-        # wait for appointment times to load
-        wait.until(ec.visibility_of_element_located((By.CLASS_NAME, "appointment-list-header")))
         found = False
         time_idx = 0
         for i in range(2):  # loop only 2 times to avoid unnecessary web queries
+            # wait for appointment times to load
+            wait.until(ec.visibility_of_element_located((By.CLASS_NAME, "appointment-list-header")))
+
             spans = driver.find_elements(By.XPATH, "//span")  # grab available appointment times
 
             for span in spans:  # loop through all available appointment times and log index of desired time
