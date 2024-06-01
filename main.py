@@ -47,7 +47,13 @@ if 0 < days_left <= 13:  # 13 days is the earliest you can schedule an appointme
 
     barber = "Sharr (Barber)"  # input "Sharr (Barber)" or "Patty (Beauty/Barber)"
 
-    driver = webdriver.Firefox()  # create Firefox webdriver
+    # comment below line when using RPI
+    driver = webdriver.Firefox()
+
+    # uncomment below lines when using RPI
+    # selenium_service = webdriver.FirefoxService(executable_path='/usr/local/bin/geckodriver')
+    # driver = webdriver.Firefox(service=selenium_service)
+
     wait = WebDriverWait(driver, 10)  # create a wait object
     try:  # try to open appointment website
         driver.get("https://booknow.appointment-plus.com/7qc9ltx6/10")
