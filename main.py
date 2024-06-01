@@ -8,7 +8,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, WebDriverException
 
-# INPUT FULL_FILEPATH ==> full file path to USNA_Barber_Scheduler directory ex: /home/pi/USNA_Barber_Scheduler/
+# INPUT FULL_FILEPATH ==> full file path to USNA_Barber_Scheduler directory ex: /home/pi/USNA_Barber_Scheduler
 filepath = "FULL_FILEPATH"
 
 # INPUT: ALPHACODE ==> your alpha code
@@ -29,12 +29,12 @@ selenium_service = webdriver.FirefoxService(executable_path='/usr/local/bin/geck
 driver = webdriver.Firefox(service=selenium_service)
 
 # Create and configure logger
-logging.basicConfig(filename=f"{filepath}scheduler.log", format='%(asctime)s %(message)s', level=logging.INFO)
+logging.basicConfig(filename=f"{filepath}/scheduler.log", format='%(asctime)s %(message)s', level=logging.INFO)
 logger = logging.getLogger()
 
 today = date.today()  # grab today's date
 
-date_file = f"{filepath}dates.txt"  # filename of date text file
+date_file = f"{filepath}/dates.txt"  # filename of date text file
 
 dates = []
 
