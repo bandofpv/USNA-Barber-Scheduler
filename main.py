@@ -205,8 +205,6 @@ if 0 < days_left <= 13:  # 13 days is the earliest you can schedule an appointme
 
         logger.info(f"Your desired appointment day on {appt_date} is unavailable")
 
-    driver.close()
-
 # if desired appointment date is after current date, write over date_file excluding desired appointment date due to pop
 elif days_left < 0:
     # add a "\n" to the end of each element in dates list
@@ -231,4 +229,6 @@ else:
     # write dates list onto date_file
     with open(date_file, 'w') as file_object:
         file_object.writelines(dates)
+
+driver.close()  # close driver
 
