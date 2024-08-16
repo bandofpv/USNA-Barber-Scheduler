@@ -186,6 +186,8 @@ if 0 < days_left <= 13:  # 13 days is the earliest you can schedule an appointme
 
                 logger.info(f"Your appointment on {appt_date} was booked")
 
+                break
+
         # add a "\n" to the end of each element in dates list
         for i in range(len(dates)):
             dates[i] = dates[i] + "\n"
