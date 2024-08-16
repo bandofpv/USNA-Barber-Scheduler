@@ -130,14 +130,17 @@ if 0 < days_left <= 13:  # 13 days is the earliest you can schedule an appointme
     wait.until(ec.visibility_of_element_located((By.ID, "calendar")))
     available_days = driver.find_elements(By.CLASS_NAME, "calendar-available")
     for available_day in available_days:  # loop through all available appointment days
-        if available_day.text == day:  # find desired appointment day
-            while True:
-                try:  # break once desired appointment day is selected
-                    available_day.click()
-                    break
-                except ElementClickInterceptedException:
-                    pass
-            available = True
+        try:
+            if available_day.text == day:  # find desired appointment day
+                while True:
+                    try:  # break once desired appointment day is selected
+                        available_day.click()
+                        break
+                    except ElementClickInterceptedException:
+                        pass
+                available = True
+        except StaleElementReferenceException:
+            pass
 
     if available:  # if the desired appointment day is available, attempt to book appointment
         found = False
