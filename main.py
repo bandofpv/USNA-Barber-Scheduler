@@ -184,6 +184,26 @@ if 0 < days_left <= 13:  # 13 days is the earliest you can schedule an appointme
                     except ElementClickInterceptedException as e:
                         pass
 
+                wait.until(ec.visibility_of_element_located((By.XPATH, '//input[@name="send_sms" and @value="no"]')))
+                radio_button = driver.find_element(By.XPATH, '//input[@name="send_sms" and @value="no"]')
+
+                while True:
+                    try:  # wait until radio_button is clicked
+                        radio_button.click()
+                        break
+                    except ElementClickInterceptedException as e:
+                        pass
+
+                wait.until(ec.visibility_of_element_located((By.NAME, 'finalize_appt')))
+                finalize_button = driver.find_element(By.NAME, 'finalize_appt')
+
+                while True:
+                    try:  # wait until finalize_button is clicked
+                        finalize_button.click()
+                        break
+                    except ElementClickInterceptedException as e:
+                        pass
+
                 logger.info(f"Your appointment on {appt_date} was booked")
 
                 break
