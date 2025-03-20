@@ -179,7 +179,7 @@ if 0 < days_left <= 13:  # 13 days is the earliest you can schedule an appointme
 
                 while True:
                     try:  # break once corresponding "book it" button is clicked
-                        book_buttons[time_idx - 6].click()
+                        book_buttons[time_idx - 5].click()
                         break
                     except ElementClickInterceptedException as e:
                         pass
