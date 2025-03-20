@@ -8,7 +8,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.common.exceptions import NoSuchElementException, ElementClickInterceptedException, WebDriverException, StaleElementReferenceException
 
-# INPUT FULL_FILEPATH ==> full file path to USNA_Barber_Scheduler directory ex: /home/pi/USNA_Barber_Scheduler
+# INPUT FULL_FILEPATH ==> full file path to USNA_Barber_Scheduler directory ex: /home/pi/USNA-Barber-Scheduler
 filepath = "FULL_FILEPATH"
 
 # INPUT: ALPHACODE ==> your alpha code
@@ -16,13 +16,13 @@ alpha = "ALPHACODE"
 
 # INPUT: "Male Haircut", "Deep Conditioner & Blow Dry", "Shampoo & Haircut", "Blow Dry & Flat Iron", "Braids, or
 # "Facial Waxing"
-service = "Male Haircut"
+service = "Male Haircut- (BARBER)"
 
 # INPUT: "Sharr (Barber)" or "Patty (Beauty/Barber)"
 barber = "Sharr (Barber)"
 
 # UNCOMMENT below line when using computer
-# driver = webdriver.Firefox()
+# driver = webdriver.Chrome()
 
 # UNCOMMENT below lines when using RPI
 selenium_service = webdriver.FirefoxService(executable_path='/usr/local/bin/geckodriver')
