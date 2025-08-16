@@ -1,5 +1,6 @@
 import logging
 from datetime import date
+from datetime import datetime
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -52,7 +53,14 @@ appt_date = dates.pop(0)  # grab the first date in dates list
 year = appt_date[0:4]
 month = appt_date[5:7]
 day = appt_date[8:10]
-appt_time = appt_date[11:16]
+appt_time_raw = appt_date[11:16]
+
+# remove leading zeros from month and day
+appt_time_obj = datetime.strptime(appt_time_raw, "%H:%M")
+try:
+    appt_time = appt_time_obj.strftime("%-H:%M")
+except ValueError:
+    appt_time = appt_time_obj.strftime("%#H:%M")
 
 appt_day = date(int(year), int(month), int(day))  # convert appt_date into a date object
 days_left = (appt_day - today).days  # calculate the number of days between appointment and today
